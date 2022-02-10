@@ -2,22 +2,41 @@
 
 #define USE_STANDALONE_ASIO 1
 
-#include "http/server_http.hpp"
+
 #include "Post.h"
 #include "BaseType.h"
 
-class HttpServer : public SimpleWeb::Server<SimpleWeb::HTTP>, public Post
-{
-public:
-	HttpServer(asio::io_context* io)
+#ifdef USE_HTTPS
+	#include "http/server_https.hpp"
+	class HttpServer : public Post, public SimpleWeb::Server<SimpleWeb::HTTPS>
 	{
-		this->io_service = std::shared_ptr<asio::io_context>(io, [](void*) {});
-	}
+		public:
+			HttpServer(asio::io_context* io, const std::string& certification_file, const std::string& private_key_file) :
+				SimpleWeb::Server<SimpleWeb::HTTPS>(certification_file, private_key_file)
+			{
+				this->io_service = std::shared_ptr<asio::io_context>(io, [](void*) {});
+			}
 
-	HttpServer(std::shared_ptr<asio::io_context> & io)
+			HttpServer(std::shared_ptr<asio::io_context> &io, const std::string& certification_file, const std::string& private_key_file):
+				SimpleWeb::Server<SimpleWeb::HTTPS>(certification_file, private_key_file)
+			{
+				this->io_service = io;
+			}
+#else
+	#include "http/server_http.hpp"
+	class HttpServer : public Post, public SimpleWeb::Server<SimpleWeb::HTTP>
 	{
-		this->io_service = io;
-	}
+	public:
+		HttpServer(asio::io_context* io)
+		{
+			this->io_service = std::shared_ptr<asio::io_context>(io, [](void*) {});
+		}
+
+		HttpServer(std::shared_ptr<asio::io_context>& io)
+		{
+			this->io_service = io;
+		}
+#endif
 
 	void run(const char * ip, uint16 port = 80)
 	{

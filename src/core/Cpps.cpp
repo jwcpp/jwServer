@@ -53,7 +53,13 @@ void HttpServer::add_post(const std::string& path, std::function<void(std::share
 void HttpClientMgr::http_get(const char* addr, const std::string& path, std::string_view content, std::function<void(std::shared_ptr<HttpClient::Response>, int)> callback_, const CaseInsensitiveMultimap& header)
 {
 	//auto client = std::shared_ptr<HttpClient>(new HttpClient(addr), [](void*) {printf("~HttpClient\n"); });
+
+#ifdef USE_HTTPS
+	auto client = std::make_shared<HttpClient>(addr, false);
+#else
 	auto client = std::make_shared<HttpClient>(addr);
+#endif
+
 	client->io_service = m_io;
 	client->request("GET", path, content, header, [this, client, callback_](std::shared_ptr<HttpClient::Response> response, const SimpleWeb::error_code& ec) {
 		if (!callback_) return;

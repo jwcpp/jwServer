@@ -3,10 +3,21 @@
 #include "Post.h"
 #include "Singleton.h"
 #define USE_STANDALONE_ASIO 1
-#include "http/client_http.hpp"
 
 using namespace SimpleWeb;
+
+#ifdef USE_HTTPS
+
+#include "http/client_https.hpp"
+using HttpClient = SimpleWeb::Client<SimpleWeb::HTTPS>;
+
+#else
+
+#include "http/client_http.hpp"
 using HttpClient = SimpleWeb::Client<SimpleWeb::HTTP>;
+
+#endif
+
 
 class HttpClientMgr : public Post, public Util::Singleton<HttpClientMgr>
 {
