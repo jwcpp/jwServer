@@ -121,7 +121,7 @@ void ConnectTask::verifySessionRet(XSocketPtr& socket, NetPacket& packet)
 		session->ping();
 		printf("verifySessionRet ping!\n");
 
-		// test
+		/*
 		if (type == eST_Db)
 		{
 #if 0
@@ -134,6 +134,7 @@ void ConnectTask::verifySessionRet(XSocketPtr& socket, NetPacket& packet)
 			pack << (uint64)10001;
 			SessionMgr::getInstance()->getDb()->sendPacket(pack);
 		}
+		*/
 	}
 }
 
