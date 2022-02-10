@@ -1,0 +1,3 @@
+	id	num	name
+×¢ÊÍ	ÎŞ		
+	1000	21	zhangsan

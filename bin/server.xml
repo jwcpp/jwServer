@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+	<verify_key>jw2021</verify_key>
+	<!-- web server -->
+	<web_server>
+		<outer_addr>127.0.0.1</outer_addr>
+		<outer_port>80</outer_port>
+		<inter_addr>127.0.0.1</inter_addr>
+		<inter_port>9002</inter_port>
+	</web_server>
+
+	<!-- db server -->
+	<db_server>
+		<addr>127.0.0.1</addr>
+		<port>8000</port>
+		<db_host>localhost</db_host>
+		<db_user>root</db_user>
+		<db_pass>111111</db_pass>
+		<database>jw_test</database>
+	</db_server>
+
+	<!--game server-->
+	<game_server>
+		<node id="1">
+			<outer_addr>127.0.0.1</outer_addr>
+			<outer_port>5001</outer_port>
+		</node>
+		<node id="2">
+			<outer_addr>127.0.0.1</outer_addr>
+			<outer_port>5002</outer_port>
+		</node>
+	</game_server>
+</root>
