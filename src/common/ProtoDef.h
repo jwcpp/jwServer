@@ -1,5 +1,34 @@
 #pragma once
 
+// output to struct
+template<typename MSG>
+inline bool parsePro(MSG& msg, const char* buff, int size)
+{
+	return msg.ParseFromArray(buff, size);
+}
+
+template<typename MSG>
+inline bool parsePro(MSG& msg, NetPacket & packet)
+{
+	return msg.ParseFromArray(packet.contents(), packet.wpos());
+}
+
+// output to buffer
+template<typename MSG>
+inline NetPacket serialize(int type, MSG& msg)
+{
+	int size = msg.ByteSizeLong();
+	NetPacket packet(type, size, ByteBuffer::Resize{});
+	msg.SerializeToArray((void*)packet.contents(), size);
+
+	return packet;
+}
+
+
+//Test test;
+//socket->sendPacket(serialize(eMSGID_SessionVerify, test));
+
+
 /*
 class Test
 {
@@ -28,16 +57,3 @@ case msgid:\
 #define SWITCH_MSG_BEGIN(msgid) switch(msgid){
 #define SWITCH_MSG_END() default: break;}
 
-
-template<typename MSG>
-NetPacket serialize(int type, MSG & msg)
-{
-	int size = msg.ByteSizeLong();
-	NetPacket packet(type, size, ByteBuffer::Resize{});
-	msg.SerializeToArray((void*)packet.contents(), size);
-
-	return packet;
-}
-
-//Test test;
-//socket->sendPacket(serialize(eMSGID_SessionVerify, test));
