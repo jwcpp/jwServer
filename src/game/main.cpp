@@ -1,5 +1,5 @@
 #include "GameServer.h"
-#include "Minidump/dumper.h"
+#include "Dumper.h"
 #include "Log.h"
 #include "ColorConsoleAppender.h"
 #include "FileAppender.h"
