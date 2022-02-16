@@ -6,7 +6,7 @@
 
 void HttpMsg::registerHttp(HttpServer* server)
 {
-	server->add_get("/test", std::bind(&HttpMsg::login, this, std::placeholders::_1, std::placeholders::_2));
+	server->add_get("/login", std::bind(&HttpMsg::login, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 void HttpMsg::updateSec()
