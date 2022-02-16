@@ -51,4 +51,9 @@ void C2ServerTask::onMsg(XSocketPtr& socket, MSGID msgid, NetPacket& packet)
 	}
 	default:break;
 	}
+
+
+	Session* session = (Session*)socket->getUser();
+	if (!session) return;
+	c2sHandler.dispense(session, packet);
 }

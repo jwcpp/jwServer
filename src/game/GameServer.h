@@ -6,6 +6,8 @@ class HttpMsg;
 class ConnectTask;
 class SessionMgr;
 class StartMgr;
+class Accept;
+class C2ServerTask;
 class GameServer : public ServerApp
 {
 public:
@@ -26,5 +28,7 @@ private:
 	ConnectTask* m_task = NULL;
 	SessionMgr* m_sessionMgr = NULL;
 	StartMgr* m_startMgr = NULL;
+	Accept* m_accept = NULL;
+	C2ServerTask* m_c2sTask = NULL;
 };
 

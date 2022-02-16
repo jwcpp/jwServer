@@ -5,6 +5,8 @@
 #include "ConnectTask.h"
 #include "SessionMgr.h"
 #include "StartMgr.h"
+#include "Accept.h"
+#include "C2ServerTask.h"
 
 int GameServer::init(int argc, char* argv[])
 {
@@ -22,6 +24,14 @@ int GameServer::init(int argc, char* argv[])
 	m_task = new ConnectTask(serverid, config.verifyKey());
 	m_sessionMgr = new SessionMgr;
 
+	// Listening outer address
+	m_c2sTask = new C2ServerTask;
+	m_accept = new Accept([this]()->SocketPtr {
+		return std::make_shared<XSocket>(m_socketmgr->next(), m_c2sTask);
+		});
+	m_accept->start(config.gameAddr(serverid)->ip.c_str(), config.gameAddr(serverid)->port, m_socketmgr->next());
+
+
 	// connect db
 	std::shared_ptr<XSocket> dbsocket(std::make_shared<XSocket>(m_socketmgr->next(), m_task));
 	dbsocket->connect(config.dbAddr()->ip.c_str(), config.dbAddr()->port);
@@ -34,6 +44,7 @@ void GameServer::stop()
 {
 	if (m_socketmgr) m_socketmgr->stop();
 	if (m_startMgr)m_startMgr->stop();
+	if (m_accept)m_accept->close();
 }
 
 void GameServer::release()
@@ -45,6 +56,9 @@ void GameServer::release()
 		m_startMgr->release();
 		delete m_startMgr;
 	}
+
+	if (m_accept) delete m_accept;
+	if (m_c2sTask) delete m_c2sTask;
 }
 
 void GameServer::onUpdate(uint32 diff)
