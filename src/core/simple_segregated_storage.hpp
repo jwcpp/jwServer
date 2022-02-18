@@ -21,6 +21,8 @@
   A Pool is some object that uses Simple Segregated Storage in this fashion.
 */
 
+#define BOOST_PREVENT_MACRO_SUBSTITUTION
+
 // std::greater
 #include <functional>
 
@@ -142,7 +144,7 @@ class simple_segregated_storage
       return (first == 0);
     }
 
-    void * malloc ()
+    void * malloc BOOST_PREVENT_MACRO_SUBSTITUTION()
     { //! Create a chunk.
       //!  \pre !empty()
       //! Increment the "first" pointer to point to the next chunk.
@@ -155,7 +157,7 @@ class simple_segregated_storage
       return ret;
     }
 
-    void free(void * const chunk)
+    void free BOOST_PREVENT_MACRO_SUBSTITUTION(void * const chunk)
     { //! Free a chunk.
       //! \pre chunk was previously returned from a malloc() referring to the same free list.
       //! \post !empty()
